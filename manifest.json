@@ -1,14 +1,26 @@
 {
+  "name": "pt-cpg/google/vit",
+  "url": "https://github.com/Pervasive-Technologies/pt-cpg-google-vit-large-patch16-224",
   "models": [
     {
       "base_name": "pt-cpg/google/vit-large-patch16-224",
+      "base_filename": "model.pt",
+      "author": "Pervasive Technologies",
+      "license": "owns",
+      "source": "https://github.com/Pervasive-Technologies/pt-cpg-google-vit-large-patch16-224",
       "description": "Custom ViT model for image embeddings, trained with proprietary data",
       "manager": {
         "type": "fiftyone.core.models.ModelManager",
         "config": {
           "entrypoint_fcn": "model.load_model",
-          "requirements": ["torch>=1.7.0", "torchvision>=0.8.0", "timm>=0.4.5"]
-        }
+          "requirements": ["torch>=1.7.0", "torchvision>=0.8.0", "timm>=0.4.5"],
+          "cpu": {
+                    "support": true
+                },
+          "gpu": {
+              "support": true
+                  }
+          }
       }
     }
   ]
