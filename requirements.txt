@@ -3,3 +3,5 @@ torchvision>=0.8.0
 timm>=0.4.5
 numpy>=1.19.5
 Pillow>=8.0.0
+requests>=2.25.1
+jsonlib>=1.6.1 
