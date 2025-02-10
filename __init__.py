@@ -82,7 +82,7 @@ class ViTEmbeddingModel:
         norm = np.linalg.norm(features)
         return features / norm if norm > 0 else features
 
-def load_model():
+def load_model(MODEL_NAME,MODEL_PATH):
     """
     Entry point for FiftyOne Model Zoo.
     """
