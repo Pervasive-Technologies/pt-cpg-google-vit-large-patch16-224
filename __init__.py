@@ -19,7 +19,7 @@ import os
 
 # Example usage
 
-MODEL_PATH = "model.pt"
+MODEL_PATH = "./model.pt"
 MODEL_URL = "https://storage.googleapis.com/fiftyone-models/pt-cpg-google-vit-large-patch16-224/model.pt"  # Replace with your actual URL
 MODEL_NAME = "pt-cpg/google/vit-large-patch16-224"
 
