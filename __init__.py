@@ -19,9 +19,9 @@ import os
 
 # Example usage
 
-MODEL_PATH = "./model.pt"
+MODEL_PATH = "./"
 MODEL_URL = "https://storage.googleapis.com/fiftyone-models/pt-cpg-google-vit-large-patch16-224/model.pt"  # Replace with your actual URL
-MODEL_NAME = "pt-cpg/google/vit-large-patch16-224"
+MODEL_NAME = "pt-cpg-google-vit-large-patch16-224"
 
 def download_model():
     """Downloads the model.
@@ -51,6 +51,10 @@ class ViTEmbeddingModel:
     def __init__(self):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         
+        # Get the current working directory
+        cwd = os.getcwd()
+
+        print("Current Directory:", cwd)
         # Ensure model weights are downloaded
         download_model()
 

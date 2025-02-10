@@ -1,9 +1,9 @@
 {
-  "name": "pt-cpg/google/vit",
+  "name": "pt-cpg-google-vit-large-patch16-224",
   "url": "https://github.com/Pervasive-Technologies/pt-cpg-google-vit-large-patch16-224",
   "models": [
     {
-      "base_name": "pt-cpg/google/vit-large-patch16-224",
+      "base_name": "pt-cpg-google-vit-large-patch16-224",
       "base_filename": "model.pt",
       "author": "Pervasive Technologies",
       "license": "owns",
