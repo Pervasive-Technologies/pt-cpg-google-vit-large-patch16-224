@@ -44,7 +44,8 @@ def download_model():
                 if chunk:
                     f.write(chunk)
         print("Download complete.")
-
+    else:
+        print("Model exist locally, not downloading.")
 
 class ViTEmbeddingModel:
     def __init__(self):
