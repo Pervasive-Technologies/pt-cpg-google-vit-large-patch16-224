@@ -7,7 +7,7 @@ https://github.com/Pervasive-Technologies/pt-cpg-google-vit-large-patch16-224
 |
 """
 import torch
-import timm
+from transformers import ViTModel, ViTImageProcessor
 from torchvision import transforms
 from PIL import Image
 import numpy as np
@@ -48,50 +48,42 @@ def download_model():
 
 class ViTEmbeddingModel:
     def __init__(self):
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"        
-        # Load the model architecture (ViT-Large Patch16-224)
-        download_model()
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         
-        self.model = timm.create_model("vit_large_patch16_224", pretrained=False, num_classes=0)  # No classifier head
+        # Ensure model weights are downloaded
+        download_model()
+
+        # Load the Vision Transformer model from Hugging Face (architecture only)
+        self.model = ViTModel.from_pretrained("google/vit-large-patch16-224")
+        
+        # Load trained weights from model.pt
         self.model.load_state_dict(torch.load(MODEL_PATH, map_location=self.device))
         self.model.to(self.device).eval()
-        
-        # Define preprocessing pipeline (must match training setup)
-        self.transform = transforms.Compose([
-            transforms.Resize((224, 224)),  # Resize to match ViT input size
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),  # Normalization
-        ])
+
+        # Use Hugging Face's preprocessing function
+        self.processor = ViTImageProcessor.from_pretrained("google/vit-large-patch16-224")
 
     def embed_image(self, image):
-            """
-            Extracts embeddings from an image and normalizes them.
-            
-            Args:
-                image (PIL.Image): Input image
-            
-            Returns:
-                np.ndarray: Normalized feature embedding (1D array)
-            """
-            # Apply preprocessing
-            image = self.transform(image).unsqueeze(0).to(self.device)
+        """
+        Extract embeddings from an image.
+        - image: A PIL Image object
+        - Returns: A normalized embedding vector (NumPy array)
+        """
+        inputs = self.processor(images=image, return_tensors="pt")
+        inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
-            # Extract embeddings
-            with torch.no_grad():
-                embedding = self.model(image)  # Shape: (1, feature_dim)
-
-            # Convert to NumPy and normalize
-            features = embedding.cpu().numpy().squeeze()  # Convert to (feature_dim,)
-            norm = np.linalg.norm(features)
-
-            if norm > 0:
-                features = features / norm  # Normalize only if norm > 0
-
-            return features
+        with torch.no_grad():
+            outputs = self.model(**inputs)
+        
+        # Extract embeddings from the CLS token (index 0)
+        features = outputs.last_hidden_state[:, 0, :].cpu().numpy().squeeze()
+        
+        # Normalize embeddings
+        norm = np.linalg.norm(features)
+        return features / norm if norm > 0 else features
 
 def load_model():
     """
     Entry point for FiftyOne Model Zoo.
-    This function will be called to load the model.
     """
     return ViTEmbeddingModel()
