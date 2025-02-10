@@ -55,14 +55,14 @@ class ViTEmbeddingModel:
         download_model()
 
         # Load the Vision Transformer model from Hugging Face (architecture only)
-        self.model = ViTModel.from_pretrained("google/vit-large-patch16-224")
+        self.model = ViTModel.from_pretrained(MODEL_PATH)
         
         # Load trained weights from model.pt
         self.model.load_state_dict(torch.load(MODEL_PATH, map_location=self.device))
         self.model.to(self.device).eval()
 
         # Use Hugging Face's preprocessing function
-        self.processor = ViTImageProcessor.from_pretrained("google/vit-large-patch16-224")
+        self.processor = ViTImageProcessor.from_pretrained(MODEL_PATH)
 
     def embed_image(self, image):
         """
