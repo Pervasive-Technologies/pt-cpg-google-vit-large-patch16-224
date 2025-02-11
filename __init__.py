@@ -109,4 +109,3 @@ def load_model(model_name,model_path):
     Entry point for FiftyOne Model Zoo.
     """
     return ViTEmbeddingModel(model_name,model_path)
-download_model()
