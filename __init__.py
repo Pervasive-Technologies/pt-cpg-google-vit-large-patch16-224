@@ -24,9 +24,9 @@ MODEL_PATH = "./"
 MODEL_URL = "https://storage.googleapis.com/fiftyone-models/pt-cpg-google-vit-large-patch16-224/model.pt"  # Replace with your actual URL
 MODEL_NAME = "pt-cpg-google-vit-large-patch16-224"
 import os
-print("loading:",MODEL_NAME,os.getcwd())
 
 def download_model():
+    print("model loading:",MODEL_NAME,os.getcwd())
     """Downloads the model.
 
     Args:
