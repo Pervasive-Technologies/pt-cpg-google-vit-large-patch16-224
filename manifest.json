@@ -4,7 +4,7 @@
   "models": [
     {
       "base_name": "pt-cpg-google-vit-large-patch16-224",
-      "base_filename": "model.pt",
+      "base_filename": "model.safetensors",
       "author": "Pervasive Technologies",
       "license": "owns",
       "source": "https://github.com/Pervasive-Technologies/pt-cpg-google-vit-large-patch16-224",
