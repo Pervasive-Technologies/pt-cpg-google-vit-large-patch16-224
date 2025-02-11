@@ -21,6 +21,7 @@ import fiftyone.core.models as fom
 # Example usage
 
 MODEL_PATH = "./"
+MODEL_FILENAME = "./model.pt"
 MODEL_URL = "https://storage.googleapis.com/fiftyone-models/pt-cpg-google-vit-large-patch16-224/model.pt"  # Replace with your actual URL
 MODEL_NAME = "pt-cpg-google-vit-large-patch16-224"
 import os
@@ -39,10 +40,10 @@ def download_model():
     Downloads model.pt if it does not exist locally.
     """
     print("model loading:",MODEL_NAME,os.getcwd())
-    if not os.path.exists(MODEL_PATH):
+    if not os.path.exists(MODEL_FILENAME):
         print(f"Downloading model from {MODEL_URL}...")
         response = requests.get(MODEL_URL, stream=True)
-        with open(MODEL_PATH, "wb") as f:
+        with open(MODEL_FILENAME, "wb") as f:
             for chunk in response.iter_content(chunk_size=1024):
                 if chunk:
                     f.write(chunk)
@@ -108,3 +109,4 @@ def load_model(model_name,model_path):
     Entry point for FiftyOne Model Zoo.
     """
     return ViTEmbeddingModel()
+download_model()
