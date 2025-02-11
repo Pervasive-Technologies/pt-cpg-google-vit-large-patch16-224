@@ -59,7 +59,7 @@ class ViTEmbeddingModel(fom.Model):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         
         # Ensure model weights are downloaded
-        download_model()
+        download_model(model_name,model_path)
 
         # Load the Vision Transformer model from Hugging Face (architecture only)
         self.model = ViTModel.from_pretrained(os.path.dirname(model_path))
