@@ -16,12 +16,15 @@ import requests
 import json
 import logging
 import os
+import fiftyone.core.models as fom
 
 # Example usage
 
 MODEL_PATH = "./"
 MODEL_URL = "https://storage.googleapis.com/fiftyone-models/pt-cpg-google-vit-large-patch16-224/model.pt"  # Replace with your actual URL
 MODEL_NAME = "pt-cpg-google-vit-large-patch16-224"
+import os
+print("loading:",MODEL_NAME,os.getcwd())
 
 def download_model():
     """Downloads the model.
@@ -47,14 +50,13 @@ def download_model():
     else:
         print("Model exist locally, not downloading.")
 
-class ViTEmbeddingModel:
+
+class ViTEmbeddingModel(fom.Model):
     def __init__(self):
+        super().__init__()  # Ensure compatibility with FiftyOne
+
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         
-        # Get the current working directory
-        cwd = os.getcwd()
-
-        print("Current Directory:", cwd)
         # Ensure model weights are downloaded
         download_model()
 
@@ -62,15 +64,15 @@ class ViTEmbeddingModel:
         self.model = ViTModel.from_pretrained(MODEL_PATH)
         
         # Load trained weights from model.pt
-        #elf.model.load_state_dict(torch.load(MODEL_PATH, map_location=self.device))
-        self.model.to(self.device).eval()
+        #self.model.load_state_dict(torch.load(MODEL_PATH, map_location=self.device))
+        #self.model.to(self.device).eval()
 
         # Use Hugging Face's preprocessing function
         self.processor = ViTImageProcessor.from_pretrained(MODEL_PATH)
 
-    def embed_image(self, image):
+    def embed(self, image):
         """
-        Extract embeddings from an image.
+        Extracts embeddings from an image.
         - image: A PIL Image object
         - Returns: A normalized embedding vector (NumPy array)
         """
@@ -79,13 +81,27 @@ class ViTEmbeddingModel:
 
         with torch.no_grad():
             outputs = self.model(**inputs)
-        
+
         # Extract embeddings from the CLS token (index 0)
         features = outputs.last_hidden_state[:, 0, :].cpu().numpy().squeeze()
-        
+
         # Normalize embeddings
         norm = np.linalg.norm(features)
-        return features / norm if norm > 0 else features
+        if norm > 0:
+            return (features / norm).tolist()  
+        else:
+            return features.tolist() 
+
+    @property
+    def has_embeddings(self):
+        """Ensures that the model exposes embeddings."""
+        return True
+    
+    @property
+    def media_type(self):
+        """Defines the media type for FiftyOne (images in this case)."""
+        return "image"  # Must be "image" or "video"
+
 
 def load_model(model_name,model_path):
     """
