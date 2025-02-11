@@ -26,7 +26,7 @@ MODEL_URL = "https://storage.googleapis.com/fiftyone-models/pt-cpg-google-vit-la
 MODEL_NAME = "pt-cpg-google-vit-large-patch16-224"
 import os
 
-def download_model():
+def download_model(model_name,model_path)):
     """Downloads the model.
 
     Args:
@@ -39,11 +39,11 @@ def download_model():
     """
     Downloads model.pt if it does not exist locally.
     """
-    print("model loading:",MODEL_NAME,os.getcwd())
-    if not os.path.exists(MODEL_FILENAME):
+    print("model loading:",model_path,os.getcwd())
+    if not os.path.exists(model_path):
         print(f"Downloading model from {MODEL_URL}...")
         response = requests.get(MODEL_URL, stream=True)
-        with open(MODEL_FILENAME, "wb") as f:
+        with open(model_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=1024):
                 if chunk:
                     f.write(chunk)
@@ -53,7 +53,7 @@ def download_model():
 
 
 class ViTEmbeddingModel(fom.Model):
-    def __init__(self):
+    def __init__(self,model_name,model_path):
         super().__init__()  # Ensure compatibility with FiftyOne
 
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -62,14 +62,14 @@ class ViTEmbeddingModel(fom.Model):
         download_model()
 
         # Load the Vision Transformer model from Hugging Face (architecture only)
-        self.model = ViTModel.from_pretrained(MODEL_PATH)
+        self.model = ViTModel.from_pretrained(os.path.dirname(model_path))
         
         # Load trained weights from model.pt
         #self.model.load_state_dict(torch.load(MODEL_PATH, map_location=self.device))
         #self.model.to(self.device).eval()
 
         # Use Hugging Face's preprocessing function
-        self.processor = ViTImageProcessor.from_pretrained(MODEL_PATH)
+        self.processor = ViTImageProcessor.from_pretrained(os.path.dirname(model_path))
 
     def embed(self, image):
         """
@@ -108,5 +108,5 @@ def load_model(model_name,model_path):
     """
     Entry point for FiftyOne Model Zoo.
     """
-    return ViTEmbeddingModel()
+    return ViTEmbeddingModel(model_name,model_path)
 download_model()
