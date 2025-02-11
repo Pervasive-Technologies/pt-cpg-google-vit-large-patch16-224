@@ -26,7 +26,6 @@ MODEL_NAME = "pt-cpg-google-vit-large-patch16-224"
 import os
 
 def download_model():
-    print("model loading:",MODEL_NAME,os.getcwd())
     """Downloads the model.
 
     Args:
@@ -39,6 +38,7 @@ def download_model():
     """
     Downloads model.pt if it does not exist locally.
     """
+    print("model loading:",MODEL_NAME,os.getcwd())
     if not os.path.exists(MODEL_PATH):
         print(f"Downloading model from {MODEL_URL}...")
         response = requests.get(MODEL_URL, stream=True)
@@ -48,7 +48,7 @@ def download_model():
                     f.write(chunk)
         print("Download complete.")
     else:
-        print("Model exist locally, not downloading.")
+        print("Model exist locally!!!!, not downloading.")
 
 
 class ViTEmbeddingModel(fom.Model):
