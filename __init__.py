@@ -21,7 +21,7 @@ import fiftyone.core.models as fom
 # Example usage
 
 MODEL_PATH = "./"
-MODEL_FILENAME = "./model.safetensors"
+MODEL_FILENAME = "model.safetensors"
 MODEL_URL = "https://storage.googleapis.com/fiftyone-models/pt-cpg-google-vit-large-patch16-224/model.safetensors"  # Replace with your actual URL
 MODEL_NAME = "pt-cpg-google-vit-large-patch16-224"
 import os
