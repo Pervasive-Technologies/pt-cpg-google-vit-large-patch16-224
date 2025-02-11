@@ -26,7 +26,7 @@ MODEL_URL = "https://storage.googleapis.com/fiftyone-models/pt-cpg-google-vit-la
 MODEL_NAME = "pt-cpg-google-vit-large-patch16-224"
 import os
 
-def download_model(model_name,model_path)):
+def download_model(model_name,model_path):
     """Downloads the model.
 
     Args:
